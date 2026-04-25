@@ -10,17 +10,13 @@ static char	*read_buf(int fd, char *temp, char *buf)
 		bytes = read(fd, buf, BUFFER_SIZE);
 		if (bytes < 0)
 		{
-			free(buf);
 			free(temp);
 			return (NULL);
 		}
 		buf[bytes] = '\0';
 		temp = ft_strjoin_free(temp, buf);
 		if (!temp)
-		{
-			free(buf);
 			return (NULL);
-		}
 	}
 	return (temp);
 }
@@ -31,7 +27,10 @@ static char	*read_line(int fd, char *temp)
 
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buf)
+	{
+		free(temp);
 		return (NULL);
+	}
 	temp = read_buf(fd, temp, buf);
 	free(buf);
 	return (temp);
@@ -91,7 +90,11 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
+	{
+		free(temp);
+		temp = NULL;
 		return (NULL);
+	}
 	temp = read_line(fd, temp);
 	if (!temp)
 		return (NULL);
