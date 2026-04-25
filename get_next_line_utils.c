@@ -53,21 +53,31 @@ char	*ft_strdup(char *s)
 char	*ft_strjoin_free(char *s1, char *s2)
 {
 	char	*res;
+	size_t	len1;
+	size_t	len2;
 	size_t	i;
 	size_t	j;
 
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	res = (char *)malloc(len1 + len2 + 1);
+	if (!res)
+	{
+		free(s1);
+		return (NULL);
+	}
 	i = 0;
 	j = 0;
-	res = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!res)
-		return (NULL);
-	while (s1 && s1[i])
+	while (i < len1)
 	{
 		res[i] = s1[i];
 		i++;
 	}
-	while (s2 && s2[j])
-		res[i++] = s2[j++];
+	while (j < len2)
+	{
+		res[i++] = s2[j];
+		j++;
+	}
 	res[i] = '\0';
 	free(s1);
 	return (res);
