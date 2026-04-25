@@ -1,13 +1,9 @@
 #include "get_next_line.h"
 
-static char	*read_line(int fd, char *temp)
+static char	*read_buf(int fd, char *temp, char *buf)
 {
-	char	*buf;
-	int		bytes;
+	int	bytes;
 
-	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buf)
-		return (NULL);
 	bytes = 1;
 	while (!ft_strchr(temp, '\n') && bytes > 0)
 	{
@@ -26,6 +22,17 @@ static char	*read_line(int fd, char *temp)
 			return (NULL);
 		}
 	}
+	return (temp);
+}
+
+static char	*read_line(int fd, char *temp)
+{
+	char	*buf;
+
+	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
+		return (NULL);
+	temp = read_buf(fd, temp, buf);
 	free(buf);
 	return (temp);
 }
@@ -66,17 +73,11 @@ static char	*new_temp(char *temp)
 	while (temp[i] && temp[i] != '\n')
 		i++;
 	if (!temp[i])
-	{
-		free(temp);
-		return (NULL);
-	}
+		return (free(temp), NULL);
 	i++;
 	res = (char *)malloc(ft_strlen(temp) - i + 1);
 	if (!res)
-	{
-		free(temp);
-		return (NULL);
-	}
+		return (free(temp), NULL);
 	while (temp[i])
 		res[j++] = temp[i++];
 	res[j] = '\0';
