@@ -95,9 +95,14 @@ char	*get_next_line(int fd)
 		temp = NULL;
 		return (NULL);
 	}
+
+	if (!temp)
+		temp = ft_strdup("");  // ✅ IMPORTANT FIX
+
 	temp = read_line(fd, temp);
 	if (!temp)
 		return (NULL);
+
 	line = get_line(temp);
 	temp = new_temp(temp);
 	return (line);
